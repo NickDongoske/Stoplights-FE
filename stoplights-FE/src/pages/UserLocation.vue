@@ -5,8 +5,13 @@
         <div class="ui message red" v-show="error">{{error}}</div>
         <div class="ui segment">
           <div class="field">
-            <div class="ui right icon input large">
-              <input type="text" placeholder="Enter your address" v-model="address"/>
+            <div class="ui right icon input large loading" :class="{loading:spinner}">
+              <input 
+              type="text" 
+              placeholder="Enter your address" 
+              v-model="address"
+              id="autocomplete"
+              />
               <i class="dot circle link icon" @click="locatorButtonPressed"></i>
             </div>
           </div>
@@ -20,16 +25,26 @@
 <script>
 import axios from 'axios'
 export default {
+
+
   data() {
     return {
       address: "",
       error: "",
+      spinner: false,
     }
   },
 
+  mounted() {
+    new google.maps.places.Autocomplete(
+      document.getElementById("autocomplete")
+    )
+  } ,
 
   methods: {
     locatorButtonPressed() {
+
+      this.spinner = true;
       if(navigator.geolocation) {
          navigator.geolocation.getCurrentPosition(
            position => {
@@ -37,11 +52,13 @@ export default {
          },
          error => {
            this.error = error.message
+           this.spinner = false;
           //  console.log(error.message);
          }
          );
       } else {
         this.error = error.message
+        this.spinner = false;
         console.log("Your browser does not support geolocation API")
       }
     },
@@ -58,9 +75,11 @@ export default {
         } else {
           this.address = response.data.results[0].formatted_address
         }
+        this.spinner = false;
       })
       .catch(error => {
         this.error = error.message;
+        this.spinner = false;
         console.log(error.message);
       })
 
