@@ -105,7 +105,7 @@ export default {
 
       new google.maps.Marker({
         position: new google.maps.LatLng(latitude, longitude),
-        map: map
+        map:map
       })
     }
   }
