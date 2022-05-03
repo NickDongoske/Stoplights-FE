@@ -103,8 +103,6 @@ export default {
         mapTypeId: google.maps.MapTypeId.ROADMAP
       });
 
-      
-
       new google.maps.Marker({
         position: new google.maps.LatLng(latitude, longitude),
         map: map
