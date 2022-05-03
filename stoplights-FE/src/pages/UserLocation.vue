@@ -21,6 +21,7 @@
       </form>
     </div>
     
+    
   </section>
   <section id="map"></section>
   </div>
