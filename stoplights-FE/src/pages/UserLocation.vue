@@ -111,7 +111,6 @@ export default {
 }
 </script>
 
-
 <style>
 .ui.button,
 .dot.circle.icon {
