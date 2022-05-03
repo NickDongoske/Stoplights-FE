@@ -1,11 +1,12 @@
 <template>
-  <section class="ui two column centered grid">
+<div>
+  <section class="ui two column centered grid" style="position:relative;z-index:1;">
     <div class="column purple">
       <form class="ui segment large form">
         <div class="ui message red" v-show="error">{{error}}</div>
         <div class="ui segment">
           <div class="field">
-            <div class="ui right icon input large loading" :class="{loading:spinner}">
+            <div class="ui right icon input large loading">
               <input 
               type="text" 
               placeholder="Enter your address" 
@@ -21,6 +22,8 @@
     </div>
     
   </section>
+  <section id="map"></section>
+  </div>
 </template>
 <script>
 import axios from 'axios'
@@ -36,10 +39,14 @@ export default {
   },
 
   mounted() {
-    new google.maps.places.Autocomplete(
+  let autocomplete =  new google.maps.places.Autocomplete(
       document.getElementById("autocomplete")
     )
-  } ,
+    autocomplete.addListener("place_changed", () => {
+    let place =  autocomplete.getPlace();
+    this.showUserLocationOnTheMap(place.geometry.location.lat(), place.geometry.location.lng())
+    })
+    },
 
   methods: {
     locatorButtonPressed() {
@@ -48,18 +55,22 @@ export default {
       if(navigator.geolocation) {
          navigator.geolocation.getCurrentPosition(
            position => {
-             this.getAddressFrom(position.coords.latitude, position.coords.longitude)
+             this.getAddressFrom(
+               position.coords.latitude, 
+               position.coords.longitude
+               );
+             this.showUserLocationOnTheMap(position.coords.latitude, 
+                                           position.coords.longitude)
          },
          error => {
-           this.error = error.message
+           this.error = "locater unable to find your address"
            this.spinner = false;
-          //  console.log(error.message);
          }
          );
       } else {
         this.error = error.message
         this.spinner = false;
-        console.log("Your browser does not support geolocation API")
+        
       }
     },
     getAddressFrom(lat, long) {
@@ -81,8 +92,21 @@ export default {
         this.error = error.message;
         this.spinner = false;
         console.log(error.message);
-      })
+        
+      });
 
+    },
+    showUserLocationOnTheMap(latitude, longitude) {
+      let map = new google.maps.Map(document.getElementById("map"), {
+        zoom:15,
+        center: new google.maps.LatLng(latitude, longitude),
+        mapTypeId: google.maps.MapTypeId.ROADMAP
+      });
+
+      new google.maps.Marker({
+        position: new google.maps.LatLng(latitude, longitude),
+        map: map
+      })
     }
   }
 }
@@ -94,5 +118,28 @@ export default {
 .dot.circle.icon {
   background-color: purple;
   color: lavenderblush ;
+}
+
+.pac-icon {
+  display: none;
+}
+.pac-item {
+  padding: 10px;
+  font-size: 16px;
+  cursor: pointer;
+}
+.pac-item:hover {
+  background-color: #ececec;
+}
+.pac-item-query {
+  font-size: 16px;
+}
+#map {
+  position: absolute;
+  top:0;
+  right: 0;
+  left: 0;
+  bottom:0;
+  background: red;
 }
 </style>
