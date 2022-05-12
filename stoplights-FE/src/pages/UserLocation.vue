@@ -6,7 +6,7 @@
         <div class="ui message red" v-show="error">{{error}}</div>
         <div class="ui segment">
           <div class="field">
-            <div class="ui right icon input large loading">
+            <div class="ui right icon input large ">
               <input 
               type="text" 
               placeholder="Enter your address" 
@@ -16,7 +16,7 @@
               <i class="dot circle link icon" @click="locatorButtonPressed"></i>
             </div>
           </div>
-          <button class="ui button">Go</button>
+          <button class="ui button" @click="">Choose this address</button>
         </div>
       </form>
     </div>
@@ -72,6 +72,8 @@ export default {
         this.spinner = false;
         
       }
+
+
     },
     getAddressFrom(lat, long) {
       axios.get("https://maps.googleapis.com/maps/api/geocode/json?latlng="
@@ -106,6 +108,9 @@ export default {
         position: new google.maps.LatLng(latitude, longitude),
         map:map
       })
+    },
+    useAddressButtonPressed() {
+      
     }
   }
 }
