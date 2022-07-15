@@ -131,8 +131,7 @@
           </select>
         </div>
         <input type="submit" value="Submit" class="btn btn-block" />
-  
-      </form>
+        </form>
     </div>
     
     
