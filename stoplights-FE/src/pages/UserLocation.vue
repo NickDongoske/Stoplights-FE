@@ -127,9 +127,15 @@
             <option>11:15 pm</option>
             <option>11:30 pm</option>
             <option>11:45 pm</option>
-            
           </select>
+          
+          <div class="poop">What is your complaint? {{ whatComplaint }}</div>
+          <textarea v-model="whatComplaint"></textarea>
+          
+          
+        
         </div>
+        
         <input type="submit" value="Submit" class="btn btn-block" />
         </form>
     </div>
